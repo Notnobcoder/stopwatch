@@ -4,21 +4,23 @@ import "./App.css";
 function App() {
   const [time, setTime] = useState(0);
   const [start, setStart] = useState(false);
-
-  const ResetFunc = () => {
-    setTime(0);
-    setStart(false);
-  };
   useEffect(() => {
     let interval = null;
     if (start) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
-    } else {
+    } else if (!start) {
       clearInterval(interval);
     }
+    return () => clearInterval(interval);
   }, [start]);
+
+  const ResetFunc = () => {
+    setTime(0);
+    setStart(false);
+  };
+
   return (
     <div className="App">
       <h1>stopwatch</h1>
@@ -29,7 +31,7 @@ function App() {
       </h1>
       <div>
         <button onClick={() => setStart(true)}>start</button>
-        <button onClick={() => setStart(false)}>Stop</button>
+        <button onClick={() => setStart(false)}>stop</button>
         <button onClick={ResetFunc}>Reset</button>
       </div>
     </div>
